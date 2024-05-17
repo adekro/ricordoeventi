@@ -8,9 +8,8 @@ const GoogleDriver = () => {
 
   const handleOpenPicker = () => {
     openPicker({
-      clientId:
-        "492131833882-nidaj9705agtc09avcef9k8nlquvdavg.apps.googleusercontent.com",
-      developerKey: "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",
+      clientId: process.env.REACT_APP_CLIEND_ID_GOOGLE,
+      developerKey: process.env.REACT_APP_KEY_GOOGLE,
       viewId: "DOCS",
       // token:
       //   'ya29.a0AVA9y1tFPdTWv6m7VlkJ3ABYRGBQ9X4P0mwk5Gh0F24TDhGnl1b6-4AGIguVbL5ZTtc-A5S4-mulAE1p2vx4j7V4zmeF2hdYMDbqmGrphz4-UM2bcrtYE4pfzc3g8aayagnSR954AIAISsUWNJZTa64EWCxaaCgYKATASAQASFQE65dr8xeiIsYRcG8mmS_ot15TArw0163', // pass oauth token in case you already have one
