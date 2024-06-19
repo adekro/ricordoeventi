@@ -7,7 +7,7 @@ import {
 } from "@clerk/clerk-react";
 
 import "./App.css";
-import Test from "./pages/Test";
+import Layout from "./pages/Layout";
 
 const App = () => {
   return (
@@ -17,7 +17,7 @@ const App = () => {
       </SignedOut>
       <SignedIn>
         <UserButton />
-        <Test></Test>
+        <Layout />
       </SignedIn>
     </header>
   );
