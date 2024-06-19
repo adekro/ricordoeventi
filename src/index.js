@@ -4,6 +4,27 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { ClerkProvider } from "@clerk/clerk-react";
+import {createTheme, MantineProvider,MantineColorsTuple  } from "@mantine/core";
+import '@mantine/core/styles.css';
+
+const myColor = [
+  '#eef3ff',
+  '#dce4f5',
+  '#b9c7e2',
+  '#94a8d0',
+  '#748dc1',
+  '#5f7cb8',
+  '#5474b4',
+  '#44639f',
+  '#39588f',
+  '#2d4b81'
+];
+const theme = createTheme({
+  /** Put your mantine theme override here */
+  colors: {
+    myColor,
+  }
+});
 
 // Import your publishable key
 const PUBLISHABLE_KEY = process.env.REACT_APP_CLERK_PUBLISHABLE_KEY;
@@ -12,11 +33,15 @@ if (!PUBLISHABLE_KEY) {
   throw new Error("Missing Publishable Key");
 }
 
+
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
-      <App />
+      <MantineProvider theme={theme}>
+        <App />
+      </MantineProvider>
     </ClerkProvider>
   </React.StrictMode>
 );

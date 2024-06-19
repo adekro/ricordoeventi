@@ -4,6 +4,8 @@
   "private": true,
   "dependencies": {
     "@clerk/clerk-react": "^5.1.0",
+    "@mantine/core": "^7.10.2",
+    "@mantine/hooks": "^7.10.2",
     "@supabase/supabase-js": "^2.43.2",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -40,5 +42,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "postcss": "^8.4.38",
+    "postcss-preset-mantine": "^1.15.0",
+    "postcss-simple-vars": "^7.0.1"
   }
 }

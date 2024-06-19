@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { createClient } from "@supabase/supabase-js";
 import { SignIn, useUser } from "@clerk/clerk-react";
+import { Box, Button,Card,Flex,List,ListItem,Paper } from "@mantine/core";
+
 
 const Layout = () => {
   const [userType, setUserType] = useState([]);
@@ -29,15 +31,32 @@ const Layout = () => {
     setUserType(data);
   }
 
+  const goAdmin = () =>{
+
+  }
+
   return (
     <>
-      {userType[0]?.user_type === 10 && <button>AREA ADMIN</button>}
-      <label>{user.id}</label>
-      <ul>
-        {userType?.map((country) => (
-          <li key={country.user_type}>{country.user_type}</li>
-        ))}
-      </ul>
+      <Box flex={true}>
+        <Flex mih={50}
+            gap="md"
+            justify="flex-start"
+            align="flex-start"
+            direction="row"
+            wrap="wrap">
+          {userType[0]?.user_type === 10 && <Button variant="filled" onClick={goAdmin}>AREA ADMIN</Button>}
+          <label>{user.id}</label>
+        </Flex>
+        </Box>
+        <Paper shadow="xl" p="xl" withBorder >
+          <Card>
+            <List>
+            {userType?.map((country) => (
+              <ListItem key={country.user_type}>{country.user_type}</ListItem>
+             ))}    
+            </List>  
+          </Card>        
+      </Paper>
     </>
   );
 };
