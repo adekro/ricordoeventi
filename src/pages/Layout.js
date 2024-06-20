@@ -4,6 +4,7 @@ import { SignIn, useUser } from "@clerk/clerk-react";
 import { Box, Button,Card,Flex,List,ListItem,Paper } from "@mantine/core";
 import ClientPage from "./ClientPage"
 import AdminPage from "./AdminPage";
+import {getQueryVariable} from "../utils/Uti"
 
 
 const Layout = () => {
@@ -23,6 +24,8 @@ const Layout = () => {
   if (!user) {
     return <SignIn />;
   }
+
+  const profilo = getQueryVariable("f");
 
   console.log(user.id, "user");
 
@@ -52,7 +55,7 @@ const Layout = () => {
         </Flex>
         </Box>
         <Paper shadow="xl" p="xl" withBorder >
-          {root==="clientpage"?<ClientPage />:null}
+          {root==="clientpage"?<ClientPage event={profilo} />:null}
           {root==="adminpage"?<AdminPage />:null}
       </Paper>
     </>
