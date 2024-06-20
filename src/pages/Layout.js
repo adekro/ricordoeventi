@@ -2,10 +2,13 @@ import React, { useState, useEffect } from "react";
 import { createClient } from "@supabase/supabase-js";
 import { SignIn, useUser } from "@clerk/clerk-react";
 import { Box, Button,Card,Flex,List,ListItem,Paper } from "@mantine/core";
+import ClientPage from "./ClientPage"
+import AdminPage from "./AdminPage";
 
 
 const Layout = () => {
   const [userType, setUserType] = useState([]);
+  const [root,setRoot] = useState("clientpage");
   const supabase = createClient(
     process.env.REACT_APP_SUPABASE_URL,
     process.env.REACT_APP_SUPABASE_ANON_KEY
@@ -49,13 +52,8 @@ const Layout = () => {
         </Flex>
         </Box>
         <Paper shadow="xl" p="xl" withBorder >
-          <Card>
-            <List>
-            {userType?.map((country) => (
-              <ListItem key={country.user_type}>{country.user_type}</ListItem>
-             ))}    
-            </List>  
-          </Card>        
+          {root==="clientpage"?<ClientPage />:null}
+          {root==="adminpage"?<AdminPage />:null}
       </Paper>
     </>
   );
