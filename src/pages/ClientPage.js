@@ -8,16 +8,18 @@ const ClientPage = ({event}) => {
     const supabase = createClient(process.env.REACT_APP_SUPABASE_URL, process.env.REACT_APP_SUPABASE_ANON_KEY)
     const [loading,setLoading] = useState(false)
 
+
     const uploadFile =(evt)=>{
-        console.log(evt)
+        setLoading(true)
         const form_data = new FormData();
         form_data.append('name_camera',evt);
         uplFile(evt)
+        setLoading(false)
     }
 
     // Upload file using standard upload
     const uplFile = async (file) =>{
-        setLoading(true)
+       
         const { data, error } = await supabase.storage.from('ricordoeventi').upload(`${event}/${file.name}`, file)
         if (error) {
             // Handle error
@@ -27,7 +29,7 @@ const ClientPage = ({event}) => {
             console.log(data)
             
         }
-        setLoading(false)
+        
 
     }
 

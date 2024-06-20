@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useRef } from "react";
 import { createClient } from "@supabase/supabase-js";
 import { SignIn, useUser } from "@clerk/clerk-react";
-import { Box, Button,Card,Flex,List,ListItem,Paper } from "@mantine/core";
+import { Box, Button,Card,Container,Flex,Input,List,ListItem,Paper } from "@mantine/core";
 import ClientPage from "./ClientPage"
 import AdminPage from "./AdminPage";
 import {getQueryVariable} from "../utils/Uti"
@@ -10,6 +10,8 @@ import {getQueryVariable} from "../utils/Uti"
 const Layout = () => {
   const [userType, setUserType] = useState([]);
   const [root,setRoot] = useState("clientpage");
+  const profilo = getQueryVariable("f");
+  const [evento,setEvento] = useState(profilo===undefined?"":profilo)
   const supabase = createClient(
     process.env.REACT_APP_SUPABASE_URL,
     process.env.REACT_APP_SUPABASE_ANON_KEY
@@ -25,7 +27,7 @@ const Layout = () => {
     return <SignIn />;
   }
 
-  const profilo = getQueryVariable("f");
+ 
 
   console.log(user.id, "user");
 
@@ -39,7 +41,17 @@ const Layout = () => {
 
   const goAdmin = () =>{
 
+
   }
+
+  const eventBlur = (evt) =>{
+    
+    setEvento(evt.target.value) 
+  }
+
+  console.log(evento,"evento")
+
+
 
   return (
     <>
@@ -55,7 +67,10 @@ const Layout = () => {
         </Flex>
         </Box>
         <Paper shadow="xl" p="xl" withBorder >
-          {root==="clientpage"?<ClientPage event={profilo} />:null}
+          {evento===""?<Container>
+            <Input placeholder="Insert event code" onBlur={eventBlur} ></Input>
+          </Container>
+          :root==="clientpage"?<ClientPage event={evento} />:null}
           {root==="adminpage"?<AdminPage />:null}
       </Paper>
     </>
