@@ -1,7 +1,8 @@
 import React,{useState} from "react";
-import { Button, Container, FileButton,Text } from "@mantine/core";
+import { LoadingOverlay,Button, Container, FileButton,Text, Center, Divider } from "@mantine/core";
 import ListDoc from "../components/ListDoc";
 import { createClient } from '@supabase/supabase-js'
+import classes from "./page.module.css"
 
 const ClientPage = ({event}) => {
 
@@ -14,7 +15,7 @@ const ClientPage = ({event}) => {
         const form_data = new FormData();
         form_data.append('name_camera',evt);
         uplFile(evt)
-        setLoading(false)
+        
     }
 
     // Upload file using standard upload
@@ -27,6 +28,7 @@ const ClientPage = ({event}) => {
         } else {
             // Handle success
             console.log(data)
+            setLoading(false)
             
         }
         
@@ -34,11 +36,14 @@ const ClientPage = ({event}) => {
     }
 
     return (    
-        <Container>              
+        <Container>  
+        <LoadingOverlay visible={loading} zIndex={1000} overlayProps={{ radius: "sm", blur: 2, bottom:0,top:0}} />            
+        <Center className={classes.margintop10}>
+            <FileButton onChange={uploadFile} accept="image/png,image/jpeg" >
+                {(props) => <Button {...props}>Upload image</Button>}
+            </FileButton>
+        </Center>
         <ListDoc event={event} loading={loading}  />
-        <FileButton onChange={uploadFile} accept="image/png,image/jpeg" >
-            {(props) => <Button {...props}>Upload image</Button>}
-        </FileButton>
         </Container>
 
      

@@ -1,7 +1,8 @@
 import React,{useEffect, useState} from "react"
-import { Card, Container, Image } from "@mantine/core"
+import { Card, Container, Divider, Image } from "@mantine/core"
 import { createClient } from '@supabase/supabase-js'
-const ListDoc =  ({event}) =>{
+import classes from "../pages/page.module.css"
+const ListDoc =  ({event,loading}) =>{
     const supabase = createClient(process.env.REACT_APP_SUPABASE_URL, process.env.REACT_APP_SUPABASE_ANON_KEY)
     const [list,setList] = useState(null);
 
@@ -19,25 +20,28 @@ const ListDoc =  ({event}) =>{
 
     useEffect(()=>{
         readFile()
-    },[])
-    
+    },[loading])
+
+       
     
     console.log(list)
     return(
         <Container>
             {list?.map(item=>{
-                return <Card shadow="sm" padding="lg" radius="md" withBorder >
-                <Card.Section>
-                    <Image
-                        src={getUrlFile(item.name)}
-                        
-                    />
-                </Card.Section>
-            </Card>
-                
+                return <>
+                <Card shadow="sm" padding="lg" radius="md" withBorder className={classes.margintop10} >
+                    <Card.Section>
+                        <Image
+                            src={getUrlFile(item.name)}
+                            
+                        />
+                    </Card.Section>
+                </Card>
+               
+                </>        
             })}
-            
-        </Container>
+            </Container>
+        
     )
 }
 export default ListDoc

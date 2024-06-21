@@ -1,7 +1,7 @@
 import React, { useState, useEffect,useRef } from "react";
 import { createClient } from "@supabase/supabase-js";
 import { SignIn, useUser } from "@clerk/clerk-react";
-import { Box, Button,Card,Container,Flex,Input,List,ListItem,Paper } from "@mantine/core";
+import { Box, Button,Card,Center,Container,Flex,Input,List,ListItem,Paper,Text } from "@mantine/core";
 import ClientPage from "./ClientPage"
 import AdminPage from "./AdminPage";
 import {getQueryVariable} from "../utils/Uti"
@@ -56,22 +56,17 @@ const Layout = () => {
   return (
     <>
       <Box flex={true}>
-        <Flex mih={50}
-            gap="md"
-            justify="flex-start"
-            align="flex-start"
-            direction="row"
-            wrap="wrap">
           {userType[0]?.user_type === 10 && <Button variant="filled" onClick={goAdmin}>AREA ADMIN</Button>}
-          <label>{user.id}</label>
-        </Flex>
-        </Box>
-        <Paper shadow="xl" p="xl" withBorder >
-          {evento===""?<Container>
-            <Input placeholder="Insert event code" onBlur={eventBlur} ></Input>
-          </Container>
-          :root==="clientpage"?<ClientPage event={evento} />:null}
-          {root==="adminpage"?<AdminPage />:null}
+        <Center>
+          <Text>{evento}</Text>
+        </Center>
+      </Box>
+      <Paper shadow="xl" p="xl" withBorder >
+        {evento===""?<Container>
+                       <Input placeholder="Insert event code" onBlur={eventBlur} ></Input>
+                     </Container>
+        :root==="clientpage"?<ClientPage event={evento} />:null}
+        {root==="adminpage"?<AdminPage />:null}
       </Paper>
     </>
   );
