@@ -5,6 +5,7 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { ClerkProvider } from "@clerk/clerk-react";
 import {createTheme, MantineProvider,MantineColorsTuple  } from "@mantine/core";
+import { MantineEmotionProvider } from "@mantine/emotion";
 import '@mantine/core/styles.css';
 
 const myColor = [
@@ -39,8 +40,10 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
-      <MantineProvider theme={theme}>
+      <MantineProvider>
+        <MantineEmotionProvider  theme={theme}>
         <App />
+        </MantineEmotionProvider>
       </MantineProvider>
     </ClerkProvider>
   </React.StrictMode>
