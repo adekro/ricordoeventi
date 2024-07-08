@@ -7,13 +7,17 @@ import ClientPage from "./ClientPage"
 import AdminPage from "./AdminPage";
 import {getQueryVariable} from "../utils/Uti"
 import { IconPaywall, IconSearch, IconSettings } from "@tabler/icons-react";
+import UserCongrats from "./UserCongrats";
 
 
 
 const Layout = () => {
   const [userType, setUserType] = useState([]);
-  const [root,setRoot] = useState("clientpage");
+
   const profilo = getQueryVariable("f");
+  const pagamento = getQueryVariable("p");
+
+  const [root,setRoot] = useState(pagamento==="success"?"pagamento":"clientpage");
   const [evento,setEvento] = useState(profilo===undefined?"":profilo)
   const supabase = createClient(
     process.env.REACT_APP_SUPABASE_URL,
@@ -57,11 +61,7 @@ const Layout = () => {
   if (!user) {
     return <SignIn />;
   }
-
  
-
-  console.log(user.id, "user");
-
   async function getUserType() {
     const { data } = await supabase
       .from("users")
@@ -76,7 +76,8 @@ const Layout = () => {
   }
 
   const goPaypal = async ()=>{
-    const {data,error}=await supabase.from("users").insert({user_id:user.id,user_type:10}).select();
+    
+    window.location.href=process.env.REACT_APP_URL_STRIPE;
 
     getUserType();
 
@@ -105,6 +106,7 @@ const Layout = () => {
           </div>
       </Box>
       <Paper shadow="xl" p="xl" withBorder >
+        {root==="pagamento"?<UserCongrats />:null}
         {evento===""?<Container>
                       <div className={classes.container}>
                        <Input placeholder="Insert event code" onBlur={eventBlur} ></Input>
