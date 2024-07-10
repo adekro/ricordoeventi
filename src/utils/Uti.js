@@ -21,3 +21,4 @@ export function getBase64(file) {
     }
   } 
 }
+

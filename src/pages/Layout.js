@@ -71,7 +71,7 @@ const Layout = () => {
   }
 
   const goAdmin = () =>{
-
+    setRoot((prec)=>{return prec==="adminpage"?"":"adminpage"});
 
   }
 
@@ -107,14 +107,15 @@ const Layout = () => {
       </Box>
       <Paper shadow="xl" p="xl" withBorder >
         {root==="pagamento"?<UserCongrats />:null}
-        {evento===""?<Container>
+        {root==="adminpage"?<AdminPage />:
+        evento===""?<Container>
                       <div className={classes.container}>
                        <Input placeholder="Insert event code" onBlur={eventBlur} ></Input>
                        <Button><IconSearch size={20} /></Button>
                       </div>
                      </Container>
         :root==="clientpage"?<ClientPage event={evento} />:null}
-        {root==="adminpage"?<AdminPage />:null}
+
       </Paper>
     </>
   );
