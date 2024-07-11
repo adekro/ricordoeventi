@@ -5,7 +5,8 @@ import { createClient } from "@supabase/supabase-js";
 import { useUser} from "@clerk/clerk-react";
 import useClerkSupabase from "../hooks/useClerkSupabase";
 import {createStyles} from "@mantine/emotion"
-import { QRCodeSVG } from "qrcode.react";
+import { QRCodeCanvas } from "qrcode.react";
+import { PdfEventQrCodeCreator } from "../components/PdfCreator/PdfEventQrCodeCreator";
 
 
 const AdminPage = () => {
@@ -15,7 +16,7 @@ const AdminPage = () => {
     const [editNameEvent,setEditNameEvent] = useState({name:"",id:""});
     const [openAddEvent,setOpenAddEvent]=useState(false)
     const [openDeleteEvent,setOpenDeleteEvent]=useState(false)
-    const [openQrCodeEvent,setOpenQrCodeEvent]=useState(false)
+    const [qrOpenCodeEvent,setQrOpenCodeEvent]=useState(false)
     const useStyles = createStyles((theme) => ({
         flex:{
             display:"flex",
@@ -32,6 +33,7 @@ const AdminPage = () => {
 
     const nameEvent = useRef();
     const delEvent = useRef();
+    const qrEvent = useRef();
 
     const {classes} = useStyles();
 
@@ -79,11 +81,34 @@ const AdminPage = () => {
        
     }
 
+  //* Gestione PDF
+  const downloadPDF = (pdfBytes) => {
+    const blob = new Blob([pdfBytes], { type: "application/pdf" });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `QrCode.pdf`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  };
 
     const generaPdfQrcode = (idEvent) =>{
 
-        alert(idEvent)
+        setEditNameEvent({name:listEvent.filter((item)=>item.id===idEvent)[0].event_name,id:idEvent})
 
+        setQrOpenCodeEvent(true);
+    }
+    const printPdfQrCode=async()=>{
+         
+        const { pdfBase64, pdfDocNormale } = await PdfEventQrCodeCreator(
+            editNameEvent.name,
+            document.getElementById("qrCanvas").toDataURL(),      
+        );
+
+    
+        downloadPDF(pdfDocNormale); 
     }
  
 
@@ -115,10 +140,7 @@ const AdminPage = () => {
         setListEvent(data);
 
       }
-      const generaQrcodePdf=()=>{
-
-      }
-    
+     
       useEffect(()=>{
 
         loadGrid()
@@ -128,7 +150,7 @@ const AdminPage = () => {
 
     return(
     <Container>
-        <QRCodeSVG value="https://reactjs.org/" />
+        
         <Table>
             <Table.Thead>
             <Table.Tr>
@@ -154,6 +176,14 @@ const AdminPage = () => {
                 <Text>Vuoi cancellare definitivamente il tuo evento? tutte le immagini caricate verranno perse, scrivi "eliminaevento" qui sotto per procedere con l'eliminazione</Text>
                 <TextInput id="testElimina" ref={delEvent}></TextInput>
                 <Button onClick={confirmDeleteEvent}><IconAlertTriangle /></Button>
+            
+            
+        </Modal>
+        <Modal opened={qrOpenCodeEvent} onClose={setQrOpenCodeEvent} title="Preview QRCode" >
+                <Text>{editNameEvent.name}</Text>         
+                <QRCodeCanvas id={"qrCanvas"} value={document.location.href + "?f=" + editNameEvent.id} />
+                    
+                <Button onClick={printPdfQrCode}><IconPdf /></Button>
             
             
         </Modal>
