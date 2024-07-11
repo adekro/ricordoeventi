@@ -1,18 +1,21 @@
 import { Button, Container,Flex,Modal,Portal,Table,Text, TextInput } from "@mantine/core";
-import { IconEdit, IconPlus, IconQrcode, IconX } from "@tabler/icons-react";
+import { IconAlarm, IconAlertTriangle, IconEdit, IconPdf, IconPlus, IconQrcode, IconX } from "@tabler/icons-react";
 import React,{useState,useRef,useEffect} from "react";
 import { createClient } from "@supabase/supabase-js";
 import { useUser} from "@clerk/clerk-react";
 import useClerkSupabase from "../hooks/useClerkSupabase";
 import {createStyles} from "@mantine/emotion"
+import { QRCodeSVG } from "qrcode.react";
 
 
 const AdminPage = () => {
     const { user } = useUser();
     const {getUserId} = useClerkSupabase(user.id);
-    const [listEvent,setListEvent] = useState([{name:"name"},{name:"name2"}]);
+    const [listEvent,setListEvent] = useState([]);
     const [editNameEvent,setEditNameEvent] = useState({name:"",id:""});
-
+    const [openAddEvent,setOpenAddEvent]=useState(false)
+    const [openDeleteEvent,setOpenDeleteEvent]=useState(false)
+    const [openQrCodeEvent,setOpenQrCodeEvent]=useState(false)
     const useStyles = createStyles((theme) => ({
         flex:{
             display:"flex",
@@ -26,8 +29,9 @@ const AdminPage = () => {
         process.env.REACT_APP_SUPABASE_ANON_KEY
       );
 
-    const [openAddEvent,setOpenAddEvent]=useState(false)
+
     const nameEvent = useRef();
+    const delEvent = useRef();
 
     const {classes} = useStyles();
 
@@ -55,15 +59,33 @@ const AdminPage = () => {
         setOpenAddEvent(false);
     }
     const deleteEvent = async ()=>{
-        const iduser= await getUserId();
-        const {data,error}=await supabase.from("events")
-        .delete()
-        .eq("id",editNameEvent.id)
-
-        loadGrid();
-
-        setOpenAddEvent(false);
+     
+        setOpenDeleteEvent(true)
+     
     }
+    const confirmDeleteEvent = async ()=>{
+
+        if(delEvent.current.value==="eliminaevento"){
+            const iduser= await getUserId();
+            const {data,error}=await supabase.from("events")
+            .delete()
+            .eq("id",editNameEvent.id)
+    
+            loadGrid();
+            setOpenAddEvent(false);
+            setOpenDeleteEvent(false)
+        }       
+
+       
+    }
+
+
+    const generaPdfQrcode = (idEvent) =>{
+
+        alert(idEvent)
+
+    }
+ 
 
     const addEvent =async ()=>{
         
@@ -80,7 +102,7 @@ const AdminPage = () => {
         <Table.Tr key={element.id}>
           <Table.Td>{element.event_name}</Table.Td>
           <Table.Td><Button onClick={()=>{openEvent(element.id)}}><IconEdit /></Button></Table.Td>
-          <Table.Td><Button onClick={openEvent}><IconQrcode /></Button></Table.Td>
+          <Table.Td><Button onClick={()=>{generaPdfQrcode(element.id)}}><IconQrcode /></Button></Table.Td>
         </Table.Tr>
       ));
 
@@ -93,6 +115,9 @@ const AdminPage = () => {
         setListEvent(data);
 
       }
+      const generaQrcodePdf=()=>{
+
+      }
     
       useEffect(()=>{
 
@@ -103,6 +128,7 @@ const AdminPage = () => {
 
     return(
     <Container>
+        <QRCodeSVG value="https://reactjs.org/" />
         <Table>
             <Table.Thead>
             <Table.Tr>
@@ -122,6 +148,16 @@ const AdminPage = () => {
             </div>}
             
         </Modal>
+        <Modal opened={openDeleteEvent} onClose={setOpenDeleteEvent} title="ATTENZIONE! eliminazione evento" >
+                        
+            
+                <Text>Vuoi cancellare definitivamente il tuo evento? tutte le immagini caricate verranno perse, scrivi "eliminaevento" qui sotto per procedere con l'eliminazione</Text>
+                <TextInput id="testElimina" ref={delEvent}></TextInput>
+                <Button onClick={confirmDeleteEvent}><IconAlertTriangle /></Button>
+            
+            
+        </Modal>
+
         </Portal>
     </Container>
     )
