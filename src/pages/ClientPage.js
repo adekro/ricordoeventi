@@ -14,8 +14,10 @@ const ClientPage = ({event}) => {
 
     const enabledEvent=async()=>{
         const { data, error } = await supabase.from('events').select('*').eq("id",event).eq("enabled",true).single();
+        if(data){
+            setCheckEvent(data.enabled);
+        }
 
-        setCheckEvent(data.enabled);
 
     }
 

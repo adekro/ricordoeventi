@@ -6,7 +6,7 @@ import {createStyles} from "@mantine/emotion"
 import ClientPage from "./ClientPage"
 import AdminPage from "./AdminPage";
 import {getQueryVariable} from "../utils/Uti"
-import { IconPaywall, IconSearch, IconSettings } from "@tabler/icons-react";
+import { IconLogin, IconPaywall, IconSearch, IconSettings } from "@tabler/icons-react";
 import UserCongrats from "./UserCongrats";
 
 const Layout = ({event}) => {
@@ -58,21 +58,36 @@ const Layout = ({event}) => {
     getUserType();
   }, []);
 
-  if (!user) {
+/*   if (!user) {
     return <SignIn />;
-  }
+  } */
  
   async function getUserType() {
-    const { data } = await supabase
+    if (!user) {
+      setUserType(-1);
+    }else{
+      const { data } = await supabase
       .from("users")
       .select()
-      .eq("user_id", user.id);
-    setUserType(data);
+      .eq("user_id", user.id).single();
+
+      setUserType(data.user_type);
+
+    }
+    
+
+    
+    
 
   }
 
   const goAdmin = () =>{
     setRoot((prec)=>{return prec==="adminpage"?"":"adminpage"});
+
+  }
+
+  const goLogin = () =>{
+    setRoot("login");
 
   }
 
@@ -89,9 +104,14 @@ const Layout = ({event}) => {
     <>
       <Box flex={true} className={classes.top}>
           <div className={classes.topleft}>
-            <UserButton />
-            {userType[0]?.user_type === 10 && <Button variant="filled" onClick={goAdmin}><IconSettings size={20} /> AREA ADMIN</Button>}
-            {userType[0]?.user_type !== 10 && <Button variant="filled" onClick={goPaypal}><IconPaywall size={20} /></Button>}
+            {!user?
+            <Button variant="filled" onClick={goLogin}><IconLogin size={20} /> Login</Button>
+            :<><UserButton />
+            
+            {userType === 10 && <Button variant="filled" onClick={goAdmin}><IconSettings size={20} /> AREA ADMIN</Button>}
+            {userType !== 10 && <Button variant="filled" onClick={goPaypal}><IconPaywall size={20} /></Button>}
+            </>
+          }
           </div>
           <div className={classes.topright}>
             <Text>{event?.event_name}</Text>
@@ -99,7 +119,8 @@ const Layout = ({event}) => {
       </Box>
       <Paper shadow="xl" p="xl" withBorder >
         {root==="pagamento"?<UserCongrats />:null}
-        {root==="adminpage"?<AdminPage />:<ClientPage event={evento} />}
+        {root==="adminpage"?<AdminPage />:root==="login"?<Center><SignIn /></Center>:<ClientPage event={evento} />}
+    
 
       </Paper>
     </>

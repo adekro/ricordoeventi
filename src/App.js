@@ -20,10 +20,15 @@ const App = () => {
   const supabase = createClient(process.env.REACT_APP_SUPABASE_URL, process.env.REACT_APP_SUPABASE_ANON_KEY)
 
   const checkEvent= async ()=>{
-    const { data, error } = await supabase.from('events').select('*')
+    const { data, error } = await supabase.from('events').select('*').single()
     .eq("id",profilo);
 
-    setEvent(data?.data);
+    console.log(data)
+
+    if(data){
+      setEvent(data);
+    }
+    
 
   }
 
@@ -36,17 +41,19 @@ const App = () => {
   return (
     
         <div>
-          {event!==""?
-          <Layout event={event} />:
-          <>
+        
+         
             <SignedOut>
-              <LandingPage />
+              {event?
+                <Layout event={event} />:
+                <LandingPage />
+              }
             </SignedOut>
             <SignedIn>
               <Layout />
             </SignedIn>
-          </>
-          }
+         
+         
           <CookieConsent enableDeclineButton location="bottom"
             buttonText="Only necessary"
             onDecline={() => {
