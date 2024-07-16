@@ -93,7 +93,7 @@ const Layout = ({event}) => {
 
   const goPaypal = async ()=>{
     
-    window.location.href=process.env.REACT_APP_URL_STRIPE;
+    window.location.href=String(process.env.REACT_APP_URL_STRIPE).replace("{userid}",user.id);
 
     getUserType();
 
