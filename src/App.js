@@ -10,6 +10,7 @@ import Layout from "./pages/Layout";
 import LandingPage from "./pages/LandingPage";
 import { getQueryVariable } from "./utils/Uti";
 import { createClient } from '@supabase/supabase-js'
+import UserCongrats from "./pages/UserCongrats";
 
 
 const App = () => {
@@ -46,6 +47,7 @@ const App = () => {
         {pagamento==="success"?
         <div>
           {idpagamento}
+          <UserCongrats />
         </div>      
         :<>        
             <SignedOut>
