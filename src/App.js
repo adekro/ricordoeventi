@@ -15,6 +15,8 @@ import { createClient } from '@supabase/supabase-js'
 const App = () => {
 
   const profilo = getQueryVariable("f");
+  const pagamento = getQueryVariable("p");
+  const idpagamento = getQueryVariable("idu");
   const [event,setEvent]=useState("");
 
   const supabase = createClient(process.env.REACT_APP_SUPABASE_URL, process.env.REACT_APP_SUPABASE_ANON_KEY)
@@ -41,8 +43,11 @@ const App = () => {
   return (
     
         <div>
-        
-         
+        {pagamento==="success"?
+        <div>
+          {idpagamento}
+        </div>      
+        :<>        
             <SignedOut>
               {event?
                 <Layout event={event} />:
@@ -52,8 +57,8 @@ const App = () => {
             <SignedIn>
               <Layout />
             </SignedIn>
-         
-         
+            </>
+         }  
           <CookieConsent enableDeclineButton location="bottom"
             buttonText="Only necessary"
             onDecline={() => {
