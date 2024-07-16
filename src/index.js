@@ -4,7 +4,7 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { ClerkProvider } from "@clerk/clerk-react";
-import {createTheme, MantineProvider,MantineColorsTuple  } from "@mantine/core";
+import {createTheme, MantineProvider  } from "@mantine/core";
 import { MantineEmotionProvider } from "@mantine/emotion";
 import '@mantine/core/styles.css';
 
@@ -41,7 +41,7 @@ root.render(
   <React.StrictMode>
     <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
       <MantineProvider>
-        <MantineEmotionProvider  theme={theme}>
+        <MantineEmotionProvider theme={theme}>
         <App />
         </MantineEmotionProvider>
       </MantineProvider>

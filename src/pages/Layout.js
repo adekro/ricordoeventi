@@ -11,8 +11,10 @@ import UserCongrats from "./UserCongrats";
 
 
 
-const Layout = () => {
+const Layout = ({event}) => {
   const [userType, setUserType] = useState([]);
+
+  console.log(event,"event -xx-");
 
   const profilo = getQueryVariable("f");
   const pagamento = getQueryVariable("p");
