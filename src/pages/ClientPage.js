@@ -1,13 +1,23 @@
-import React,{useState} from "react";
+import React,{useState,useEffect} from "react";
 import { LoadingOverlay,Button, Container, FileButton,Text, Center, Divider } from "@mantine/core";
 import ListDoc from "../components/ListDoc";
 import { createClient } from '@supabase/supabase-js'
 import classes from "./page.module.css"
+import NullPage from "../components/NullPage";
 
 const ClientPage = ({event}) => {
 
     const supabase = createClient(process.env.REACT_APP_SUPABASE_URL, process.env.REACT_APP_SUPABASE_ANON_KEY)
-    const [loading,setLoading] = useState(false)
+    const [loading,setLoading] = useState(false);
+    const [checkEvent,setCheckEvent] = useState(false);
+
+
+    const enabledEvent=async()=>{
+        const { data, error } = await supabase.from('events').select('*').eq("id",event).eq("enabled",true).single();
+
+        setCheckEvent(data.enabled);
+
+    }
 
 
     const uploadFile =(evt)=>{
@@ -35,8 +45,13 @@ const ClientPage = ({event}) => {
 
     }
 
+    useEffect(()=>{
+        enabledEvent();
+    },[]);
+
     return (    
         <Container>  
+        {checkEvent?<>
         <LoadingOverlay visible={loading} zIndex={1000} overlayProps={{ radius: "sm", blur: 2, bottom:0,top:0}} />            
         <Center className={classes.margintop10}>
             <FileButton onChange={uploadFile} accept="image/png,image/jpeg" >
@@ -44,6 +59,10 @@ const ClientPage = ({event}) => {
             </FileButton>
         </Center>
         <ListDoc event={event} loading={loading}  />
+        </>
+        :
+        <NullPage />
+        }
         </Container>
 
      

@@ -9,8 +9,6 @@ import {getQueryVariable} from "../utils/Uti"
 import { IconPaywall, IconSearch, IconSettings } from "@tabler/icons-react";
 import UserCongrats from "./UserCongrats";
 
-
-
 const Layout = ({event}) => {
   const [userType, setUserType] = useState([]);
 
@@ -70,6 +68,7 @@ const Layout = ({event}) => {
       .select()
       .eq("user_id", user.id);
     setUserType(data);
+
   }
 
   const goAdmin = () =>{
@@ -86,15 +85,6 @@ const Layout = ({event}) => {
     
   }
 
-  const eventBlur = (evt) =>{
-    
-    setEvento(evt.target.value) 
-  }
-
-  console.log(evento,"evento")
-
-
-
   return (
     <>
       <Box flex={true} className={classes.top}>
@@ -104,19 +94,12 @@ const Layout = ({event}) => {
             {userType[0]?.user_type !== 10 && <Button variant="filled" onClick={goPaypal}><IconPaywall size={20} /></Button>}
           </div>
           <div className={classes.topright}>
-            <Text>{evento}</Text>
+            <Text>{event?.event_name}</Text>
           </div>
       </Box>
       <Paper shadow="xl" p="xl" withBorder >
         {root==="pagamento"?<UserCongrats />:null}
-        {root==="adminpage"?<AdminPage />:
-        evento===""?<Container>
-                      <div className={classes.container}>
-                       <Input placeholder="Insert event code" onBlur={eventBlur} ></Input>
-                       <Button><IconSearch size={20} /></Button>
-                      </div>
-                     </Container>
-        :root==="clientpage"?<ClientPage event={evento} />:null}
+        {root==="adminpage"?<AdminPage />:<ClientPage event={evento} />}
 
       </Paper>
     </>
