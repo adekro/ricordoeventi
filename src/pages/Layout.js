@@ -71,7 +71,7 @@ const Layout = ({event}) => {
       .select()
       .eq("user_id", user.id).single();
 
-      setUserType(data.user_type);
+      setUserType(data?.user_type);
 
     }
     

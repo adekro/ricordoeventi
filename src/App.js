@@ -47,7 +47,7 @@ const App = () => {
         {pagamento==="success"?
         <div>
           {idpagamento}
-          <UserCongrats />
+          <UserCongrats idPagamento={idpagamento} /> 
         </div>      
         :<>        
             <SignedOut>
