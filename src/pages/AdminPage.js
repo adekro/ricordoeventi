@@ -1,5 +1,5 @@
 import { Button, Container,Flex,Modal,Portal,Table,Text, TextInput } from "@mantine/core";
-import { IconAlarm, IconAlertTriangle, IconEdit, IconPdf, IconPlus, IconQrcode, IconX } from "@tabler/icons-react";
+import { IconAlarm, IconAlertTriangle, IconEdit, IconList, IconPdf, IconPlus, IconQrcode, IconX } from "@tabler/icons-react";
 import React,{useState,useRef,useEffect} from "react";
 import { createClient } from "@supabase/supabase-js";
 import { useUser} from "@clerk/clerk-react";
@@ -7,6 +7,7 @@ import useClerkSupabase from "../hooks/useClerkSupabase";
 import {createStyles} from "@mantine/emotion"
 import { QRCodeCanvas } from "qrcode.react";
 import { PdfEventQrCodeCreator } from "../components/PdfCreator/PdfEventQrCodeCreator";
+import ClientPage from "./ClientPage";
 
 
 const AdminPage = () => {
@@ -14,9 +15,10 @@ const AdminPage = () => {
     const {getUserId} = useClerkSupabase(user.id);
     const [listEvent,setListEvent] = useState([]);
     const [editNameEvent,setEditNameEvent] = useState({name:"",id:""});
-    const [openAddEvent,setOpenAddEvent]=useState(false)
-    const [openDeleteEvent,setOpenDeleteEvent]=useState(false)
-    const [qrOpenCodeEvent,setQrOpenCodeEvent]=useState(false)
+    const [openAddEvent,setOpenAddEvent]=useState(false);
+    const [openDeleteEvent,setOpenDeleteEvent]=useState(false);
+    const [qrOpenCodeEvent,setQrOpenCodeEvent]=useState(false);
+    const [openListEvent,setOpenListEvent]=useState(false);
     const useStyles = createStyles((theme) => ({
         flex:{
             display:"flex",
@@ -28,7 +30,7 @@ const AdminPage = () => {
     const supabase = createClient(
         process.env.REACT_APP_SUPABASE_URL,
         process.env.REACT_APP_SUPABASE_ANON_KEY
-      );
+    );
 
 
     const nameEvent = useRef();
@@ -95,9 +97,7 @@ const AdminPage = () => {
   };
 
     const generaPdfQrcode = (idEvent) =>{
-
         setEditNameEvent({name:listEvent.filter((item)=>item.id===idEvent)[0].event_name,id:idEvent})
-
         setQrOpenCodeEvent(true);
     }
     const printPdfQrCode=async()=>{
@@ -109,6 +109,11 @@ const AdminPage = () => {
 
     
         downloadPDF(pdfDocNormale); 
+    }
+
+    const listStorage=(idEvent)=>{
+        setEditNameEvent({name:listEvent.filter((item)=>item.id===idEvent)[0].event_name,id:idEvent})
+        setOpenListEvent(true);
     }
  
 
@@ -127,6 +132,7 @@ const AdminPage = () => {
         <Table.Tr key={element.id}>
           <Table.Td>{element.event_name}</Table.Td>
           <Table.Td><Button onClick={()=>{openEvent(element.id)}}><IconEdit /></Button></Table.Td>
+          <Table.Td><Button onClick={()=>{listStorage(element.id)}}><IconList /></Button></Table.Td>
           <Table.Td><Button onClick={()=>{generaPdfQrcode(element.id)}}><IconQrcode /></Button></Table.Td>
         </Table.Tr>
       ));
@@ -171,13 +177,9 @@ const AdminPage = () => {
             
         </Modal>
         <Modal opened={openDeleteEvent} onClose={setOpenDeleteEvent} title="ATTENZIONE! eliminazione evento" >
-                        
-            
                 <Text>Vuoi cancellare definitivamente il tuo evento? tutte le immagini caricate verranno perse, scrivi "eliminaevento" qui sotto per procedere con l'eliminazione</Text>
                 <TextInput id="testElimina" ref={delEvent}></TextInput>
                 <Button onClick={confirmDeleteEvent}><IconAlertTriangle /></Button>
-            
-            
         </Modal>
         <Modal opened={qrOpenCodeEvent} onClose={setQrOpenCodeEvent} title="Preview QRCode" >
                 <Text>{editNameEvent.name}</Text>         
@@ -186,6 +188,12 @@ const AdminPage = () => {
                 <Button onClick={printPdfQrCode}><IconPdf /></Button>
             
             
+        </Modal>
+
+        </Portal>
+        <Portal>
+        <Modal opened={openListEvent} onClose={setOpenListEvent} title={editNameEvent.name} >
+               <ClientPage event={editNameEvent.id} />
         </Modal>
 
         </Portal>
