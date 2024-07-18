@@ -2,6 +2,7 @@ import React,{useEffect} from "react";
 import { Button, Container,Text } from "@mantine/core";
 import { createClient } from "@supabase/supabase-js";
 import { SignIn, useUser,UserButton } from "@clerk/clerk-react";
+import StripeButton from "../components/Stripe/StripeButton";
 
 const UserCongrats = ({idPagamento})=>{
     const { user } = useUser();
@@ -18,6 +19,8 @@ const UserCongrats = ({idPagamento})=>{
         
     }
 
+    
+
   useEffect(()=>{
     insertUser();
   },[]);
@@ -28,7 +31,8 @@ const UserCongrats = ({idPagamento})=>{
             <Text>
                 Pagamento avvenuto con successo
                 <Button onClick={()=>{document.location.href=document.location.href.split("?")[0]}}>torna alla home</Button>
-
+                
+                <StripeButton />
             </Text>
         </Container>
     );

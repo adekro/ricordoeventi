@@ -1,4 +1,5 @@
 import React,{useEffect,useState} from "react";
+import {loadStripe} from '@stripe/stripe-js';
 import {
   SignedIn,
   SignedOut,
@@ -11,6 +12,8 @@ import LandingPage from "./pages/LandingPage";
 import { getQueryVariable } from "./utils/Uti";
 import { createClient } from '@supabase/supabase-js'
 import UserCongrats from "./pages/UserCongrats";
+
+
 
 
 const App = () => {
@@ -42,7 +45,6 @@ const App = () => {
   },[profilo])
 
   return (
-    
         <div>
         {pagamento==="success"?
         <div>
@@ -69,7 +71,7 @@ const App = () => {
             expires={150}>You are in control of your cookies. On our website we use strictly necessary (to ensure our site works properly), analytical (tells us how the site is used), functional (user preferences) cookies.
           </CookieConsent>
         </div>
-       
+
       );    
   
 };
