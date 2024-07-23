@@ -1,0 +1,29 @@
+{
+  "devDependencies": {
+    "prettier": "3.2.4",
+    "supabase": "1.150.0"
+  },
+  "scripts": {
+    "remove_users": "node ./scripts/remove_users.js",
+    "reset:local": "npx supabase db reset",
+    "types:gen": "npm run types:gen:db && npm run types:gen:client && npm run types:gen:admin && npm run types:gen:functions",
+    "types:gen:db": "npx supabase gen types typescript --schema public > ./supabase/types/supabase.ts --local",
+    "types:gen:functions": "npx supabase gen types typescript --schema public > ./supabase/functions/_shared/supabase.ts --local",
+    "types:gen:client": "npx supabase gen types typescript --schema public > ../client/src/types/supabase.ts --local",
+    "types:gen:admin": "npx supabase gen types typescript --schema public > ../admin/src/types/supabase.ts --local",
+    "save:dump:local": "npm run save:seed:local && npm run save:role:local && npm run remove_users",
+    "save:role:local": "npx supabase db dump -f supabase/role.sql --role-only --db-url postgresql://postgres:postgres@localhost:54322/postgres",
+    "save:seed:local": "npx supabase db dump -f supabase/seed.sql --data-only --db-url postgresql://postgres:postgres@localhost:54322/postgres",
+    "save:dump:prod": "npm run save:seed:prod && npm run save:role:prod && npm run remove_users",
+    "save:role:prod": "npx supabase db dump -f supabase/roleprod.sql --role-only --db-url postgresql://postgres.ouxyxbjgzhveqaqqukvn:76265213rgsqds@@@@aws-0-eu-west-1.pooler.supabase.com:6543/postgres",
+    "save:seed:prod": "npx supabase db dump -f supabase/seedprod.sql --data-only --db-url postgresql://postgres.ouxyxbjgzhveqaqqukvn:76265213rgsqds@@@@aws-0-eu-west-1.pooler.supabase.com:6543/postgres",
+    "functions:lint": "deno lint ./supabase/functions",
+    "ts:check": "deno check **/*.ts --import-map=./supabase/functions/import_map.json"
+  },
+  "engines": {
+    "node": "20.x"
+  },
+  "dependencies": {
+    "spectrum-icons": "^0.0.3"
+  }
+}

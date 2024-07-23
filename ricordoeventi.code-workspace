@@ -1,0 +1,18 @@
+{
+    "folders": [
+      { "name": "root", "path": "." },
+      { "name": "[supabase-functions]", "path": "db/supabase/functions" },
+      { "name": "[db]", "path": "db" },
+      { "name": "[client]", "path": "client" }
+    ],
+    "settings": {
+      "deno.enable": false,
+      "deno.importMap": "./db/supabase/functions/import_map.json",
+      "search.useGlobalIgnoreFiles": true,
+      "search.useIgnoreFiles": true,
+      "files.exclude": {
+        "**/.git": false
+      },
+      "search.useParentIgnoreFiles": true
+    }
+  }
