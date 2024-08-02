@@ -83,6 +83,12 @@ const AdminPage = () => {
        
     }
 
+    const testinvoke=async ()=>{
+        const { data, error } = await supabase.functions.invoke('iscrizione', {
+            body: { name: 'Functions' },
+          })
+    }
+
   //* Gestione PDF
   const downloadPDF = (pdfBytes) => {
     const blob = new Blob([pdfBytes], { type: "application/pdf" });
@@ -197,6 +203,7 @@ const AdminPage = () => {
         </Modal>
 
         </Portal>
+        <Button onClick={testinvoke}>test</Button>
     </Container>
     )
 };
