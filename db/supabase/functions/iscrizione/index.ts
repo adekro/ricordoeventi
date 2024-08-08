@@ -8,16 +8,41 @@
 console.log("Hello from Functions!")
 
 Deno.serve(async (req) => {
-  const { name } = await req.json()
+
+  if (req.method === 'OPTIONS') return ResponseBuilder.success({});
+
+  try {
+    const { name } = await req.json()
   const data = {
     message: `Hello ${name}!`,
   }
 
-  return new Response(
-    JSON.stringify(data),
-    { headers: { "Content-Type": "application/json" } },
-  )
+  return ResponseBuilder.success(data);
+  } catch (error) {
+    return ResponseBuilder.serverError(error);
+  }
+  
+  
 })
+
+export const ResponseBuilder = {
+  success: (body?: object | null) => buildResponse(200, body ?? {result: 'success'}),
+  badRequest: (body: object) => buildResponse(400, body),
+  noAuth: (body: object) => buildResponse(401, body),
+  serverError: (body: object | string) => buildResponse(500, body)
+};
+
+const buildResponse = (status: number, body: object | string) =>
+  new Response(JSON.stringify(body), {
+    headers: {...corsHeaders, 'Content-Type': 'application/json'},
+    status
+  });
+
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers':
+    'Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, Apikey, X-Clerk-Session-Id, X-Clerk-Session-Token, X-Client-Info'
+};
 
 /* To invoke locally:
 
