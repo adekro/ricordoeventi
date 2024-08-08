@@ -15,7 +15,7 @@ export async function PdfEventQrCodeCreator(
   const margin = 40;
 
   const condizioniUrlImg = await pdfDoc.embedPng(imageQrCode);
-
+ 
   page.drawText(
     nameEvent,
     {
